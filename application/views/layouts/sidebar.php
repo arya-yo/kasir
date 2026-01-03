@@ -5,548 +5,158 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($title) ? $title . ' - ' : ''; ?>Aplikasi Kasir</title>
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#2563eb',
+                    },
+                    animation: {
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'slide-out': 'slideOut 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'scale-in': 'scaleIn 0.2s ease-out',
+                    },
+                    keyframes: {
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        },
+                        slideOut: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-        }
-        
-        .sidebar {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 280px;
-            z-index: 1000;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            transition: width 0.3s ease-in-out, margin-left 0.3s ease-in-out;
-            overflow-x: hidden;
-            overflow-y: auto;
-            touch-action: none;
-        }
-        
-        .sidebar.collapsed {
-            width: 0;
-            margin-left: -280px;
-        }
-        
-        .sidebar.hidden {
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        
-        .sidebar-header {
-            padding: 20px;
-            color: white;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-        }
-
-        .sidebar-header h4 {
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .sidebar-toggle-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-            padding: 0;
-            width: auto;
-            height: auto;
-        }
-        
-        .sidebar-toggle-btn:hover {
-            opacity: 1;
-        }
-        
-        .collapse-btn {
-            position: fixed;
-            top: 20px;
-            left: 10px;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            border-radius: 5px;
-            z-index: 999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .collapse-btn:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        
-        .collapse-btn.visible {
-            display: flex;
-        }
-        
-        .sidebar-menu {
-            padding: 20px 0;
-            max-height: calc(100vh - 120px);
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding-right: 5px;
-        }
-        
-        .sidebar-menu::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .sidebar-menu::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .sidebar-menu::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-        }
-        
-        .sidebar-menu::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-        
-        .sidebar-menu .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 12px 20px;
-            margin: 5px 10px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            text-decoration: none !important;
-        }
-        
-        .sidebar-menu .nav-link:hover,
-        .sidebar-menu .nav-link.active {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-        }
-        
-        .sidebar-menu .nav-link i {
-            width: 20px;
-            margin-right: 10px;
-            flex-shrink: 0;
-        }
-        
-        /* Submenu Styles */
-        .sidebar-menu .menu-item {
-            position: relative;
-        }
-
-        .sidebar-menu .menu-toggle {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            text-decoration: none !important;
-        }
-
-        .sidebar-menu .menu-toggle::after {
+        .sidebar-menu::-webkit-scrollbar { width: 6px; }
+        .sidebar-menu::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-menu::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 3px; }
+        .sidebar-menu::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.5); }
+        .menu-toggle::after {
             content: '\f078';
             font-family: 'Font Awesome 6 Free';
             font-weight: 900;
             font-size: 12px;
             transition: transform 0.3s ease;
-            margin-left: auto;
-            flex-shrink: 0;
         }
-
-        .sidebar-menu .menu-toggle.active::after {
-            transform: rotate(-180deg);
-        }
-
-        .sidebar-menu .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, opacity 0.4s ease;
-            opacity: 0;
-        }
-
-        .sidebar-menu .submenu.active {
-            max-height: 500px;
-            opacity: 1;
-        }
-
-        .sidebar-menu .submenu-item {
-            color: rgba(255,255,255,0.75);
-            padding: 8px 20px 8px 50px;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-            transition: all 0.3s;
-            border-left: 3px solid transparent;
-            margin: 2px 0;
-            font-size: 0.9rem;
-            text-decoration: none !important;
-        }
-
-        .sidebar-menu .submenu-item:hover {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-            border-left: 3px solid rgba(255,255,255,0.5);
-        }
-
-        .sidebar-menu .submenu-item.active {
-            background-color: rgba(255,255,255,0.15);
-            color: white;
-            border-left: 3px solid white;
-        }
-
-        .sidebar-menu .submenu-item i {
-            width: 16px;
-            margin-right: 10px;
-            flex-shrink: 0;
-            font-size: 13px;
-        }
-        
-        .main-content {
-            margin-left: 280px;
-            padding: 20px;
-            transition: margin-left 0.3s ease-in-out, padding-left 0.3s ease-in-out;
-        }
-        
-        .main-content.collapsed {
-            margin-left: 0;
-            padding-left: 70px;
-        }
-        
-        .main-content.sidebar-hidden {
-            margin-left: 0;
-        }
-        
-        .hamburger-btn {
-            background: none;
-            border: none;
-            color: #667eea;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-        
-        .hamburger-btn:hover {
-            background-color: rgba(102, 126, 234, 0.1);
-            color: #764ba2;
-        }
-        
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
-        
-        .sidebar-overlay.active {
-            display: block;
-        }
-        
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        
-        .content-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .badge-role {
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-        
-        .badge-admin {
-            background-color: #dc3545;
-            color: white;
-        }
-        
-        .badge-petugas {
-            background-color: #28a745;
-            color: white;
-        }
-        
-        /* Mobile Responsiveness */
-        @media (max-width: 992px) {
-            .sidebar {
-                width: 250px;
-            }
-            
-            .sidebar.collapsed {
-                margin-left: -250px;
-            }
-            
-            .main-content {
-                margin-left: 250px;
-                padding: 15px;
-            }
-            
-            .main-content.collapsed {
-                margin-left: 0;
-                padding-left: 70px;
-            }
-            
-            .hamburger-btn {
-                display: none;
-            }
-            
-            .sidebar-header h4 {
-                font-size: 18px;
-            }
-            
-            .sidebar-menu .nav-link {
-                padding: 10px 15px;
-                margin: 3px 5px;
-                font-size: 14px;
-            }
-            
-            .content-card {
-                padding: 15px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 200px;
-                position: fixed;
-            }
-            
-            .sidebar.collapsed {
-                margin-left: -200px;
-            }
-            
-            .sidebar.hidden {
-                transform: translateX(-100%);
-            }
-            
-            .main-content {
-                margin-left: 0;
-                padding: 12px;
-            }
-            
-            .main-content.collapsed {
-                padding-left: 65px;
-            }
-            
-            .content-card {
-                padding: 12px;
-                border-radius: 8px;
-            }
-            
-            .sidebar-header h4 {
-                font-size: 16px;
-            }
-            
-            .sidebar-menu .nav-link {
-                padding: 10px 12px;
-                margin: 3px 5px;
-                font-size: 13px;
-            }
-            
-            .user-info {
-                gap: 5px;
-                font-size: 13px;
-            }
-            
-            .navbar {
-                margin-bottom: 10px;
-            }
-            
-            .navbar-brand {
-                font-size: 16px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .sidebar {
-                width: 180px;
-            }
-            
-            .sidebar.collapsed {
-                margin-left: -180px;
-            }
-            
-            .main-content {
-                padding: 8px;
-            }
-            
-            .main-content.collapsed {
-                padding-left: 60px;
-            }
-            
-            .content-card {
-                padding: 10px;
-                border-radius: 6px;
-            }
-            
-            .sidebar-header h4 {
-                font-size: 14px;
-            }
-            
-            .sidebar-menu .nav-link {
-                padding: 8px 10px;
-                margin: 2px 3px;
-                font-size: 12px;
-            }
-            
-            .badge-role {
-                padding: 3px 6px;
-                font-size: 10px;
-            }
-            
-            .user-info {
-                flex-direction: column;
-                align-items: flex-end;
-                gap: 3px;
-                font-size: 12px;
-            }
-            
-            .navbar-brand {
-                font-size: 14px;
-            }
-        }
+        .menu-toggle.active::after { transform: rotate(-180deg); }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 font-sans">
     <!-- Sidebar Overlay -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-[999] transition-opacity duration-300" id="sidebarOverlay"></div>
     
-    <!-- Collapse Button (Visible when sidebar is collapsed) -->
-    <button class="collapse-btn" id="collapseBtn" onclick="expandSidebar()" title="Buka Sidebar">
+    <!-- Collapse Button -->
+    <button class="hidden fixed top-5 left-2.5 w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 text-white text-2xl rounded-lg z-[999] items-center justify-center shadow-lg hover:translate-x-1 hover:shadow-xl transition-all duration-300" id="collapseBtn" onclick="expandSidebar()" title="Buka Sidebar">
         <i class="fas fa-chevron-right"></i>
     </button>
     
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h4><i class="fas fa-cash-register"></i> KASIR</h4>
-            <small>Sistem Manajemen</small>
-            <button class="sidebar-toggle-btn" onclick="collapseSidebar()" title="Tutup Sidebar">
-                <i class="fas fa-chevron-left"></i>
-            </button>
+    <div class="fixed top-0 left-0 h-screen w-[280px] bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg z-[1000] transition-all duration-300 ease-in-out overflow-hidden" id="sidebar">
+        <?php 
+        $role = $this->session->userdata('role');
+        $current_page = isset($current_page) ? $current_page : '';
+        ?>
+        <div class="p-5 text-white border-b border-white/10 relative">
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <h4 class="m-0 font-semibold text-xl animate-fade-in"><i class="fas fa-cash-register"></i> KASIR</h4>
+                    <small class="text-white/80 text-xs">Sistem Manajemen</small>
+                </div>
+                <button class="bg-transparent border-none text-white text-xl cursor-pointer opacity-80 hover:opacity-100 transition-opacity duration-300" onclick="collapseSidebar()" title="Tutup Sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            <div class="pt-3 border-t border-white/10 mt-3">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium truncate"><?php echo $this->session->userdata('username'); ?></div>
+                        <div class="text-xs text-white/70"><?php echo ucfirst($role); ?></div>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <nav class="sidebar-menu">
-            <?php 
-            $role = $this->session->userdata('role');
-            $current_page = isset($current_page) ? $current_page : '';
-            ?>
+        <nav class="py-5 max-h-[calc(100vh-120px)] overflow-y-auto overflow-x-hidden pr-1">
             
-            <a href="<?php echo site_url('dashboard'); ?>" class="nav-link <?php echo $current_page == 'dashboard' ? 'active' : ''; ?>" onclick="closeSidebar()">
-                <i class="fas fa-home"></i> Dashboard
+            <a href="<?php echo site_url('dashboard'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'dashboard' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+                <i class="fas fa-home w-5 mr-2.5 flex-shrink-0"></i> Dashboard
             </a>
             
             <?php if ($role == 'admin'): ?>
-                <!-- Menu Master Data untuk Admin (Expandable) -->
-                <div class="menu-item">
-                    <a class="nav-link menu-toggle" role="button" onclick="toggleSubmenu(event)">
-                        <span><i class="fas fa-database"></i> Master Data</span>
+                <div class="relative">
+                    <a class="flex items-center justify-between text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white cursor-pointer menu-toggle" role="button" onclick="toggleSubmenu(event)">
+                        <span class="flex items-center"><i class="fas fa-database w-5 mr-2.5 flex-shrink-0"></i> Master Data</span>
                     </a>
-                    <div class="submenu">
-                        <a class="submenu-item <?php echo $current_page == 'user' ? 'active' : ''; ?>" href="<?php echo site_url('user'); ?>" onclick="closeSidebar()">
-                            <i class="fas fa-users"></i> Data User
+                    <div class="max-h-0 overflow-hidden transition-all duration-400 opacity-0 submenu">
+                        <a class="flex items-center text-white/75 py-2 px-5 pl-12 my-0.5 text-sm transition-all duration-300 border-l-3 border-transparent hover:bg-white/10 hover:text-white hover:border-white/50 <?php echo $current_page == 'user' ? 'bg-white/15 text-white border-white' : ''; ?>" href="<?php echo site_url('user'); ?>" onclick="closeSidebar()">
+                            <i class="fas fa-users w-4 mr-2.5 flex-shrink-0 text-xs"></i> Data User
                         </a>
-                        <a class="submenu-item <?php echo $current_page == 'produk' ? 'active' : ''; ?>" href="<?php echo site_url('produk'); ?>" onclick="closeSidebar()">
-                            <i class="fas fa-box"></i> Data Produk
+                        <a class="flex items-center text-white/75 py-2 px-5 pl-12 my-0.5 text-sm transition-all duration-300 border-l-3 border-transparent hover:bg-white/10 hover:text-white hover:border-white/50 <?php echo $current_page == 'produk' ? 'bg-white/15 text-white border-white' : ''; ?>" href="<?php echo site_url('produk'); ?>" onclick="closeSidebar()">
+                            <i class="fas fa-box w-4 mr-2.5 flex-shrink-0 text-xs"></i> Data Produk
                         </a>
                     </div>
                 </div>
-                <a href="<?php echo site_url('pelanggan'); ?>" class="nav-link <?php echo $current_page == 'pelanggan' ? 'active' : ''; ?>" onclick="closeSidebar()">
-                    <i class="fas fa-user-friends"></i> Data Pelanggan
+                <a href="<?php echo site_url('pelanggan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'pelanggan' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+                    <i class="fas fa-user-friends w-5 mr-2.5 flex-shrink-0"></i> Data Pelanggan
                 </a>
-                <a href="<?php echo site_url('laporan'); ?>" class="nav-link <?php echo $current_page == 'laporan' ? 'active' : ''; ?>" onclick="closeSidebar()">
-                    <i class="fas fa-chart-bar"></i> Laporan Penjualan
+                <a href="<?php echo site_url('laporan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'laporan' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+                    <i class="fas fa-chart-bar w-5 mr-2.5 flex-shrink-0"></i> Laporan Penjualan
                 </a>
             <?php endif; ?>
             
             <?php if ($role == 'petugas'): ?>
-                <a href="<?php echo site_url('penjualan'); ?>" class="nav-link <?php echo $current_page == 'penjualan' ? 'active' : ''; ?>" onclick="closeSidebar()">
-                    <i class="fas fa-shopping-cart"></i> Transaksi Penjualan
+                <a href="<?php echo site_url('penjualan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'penjualan' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+                    <i class="fas fa-shopping-cart w-5 mr-2.5 flex-shrink-0"></i> Transaksi Penjualan
                 </a>
-                <a href="<?php echo site_url('pelanggan'); ?>" class="nav-link <?php echo $current_page == 'pelanggan' ? 'active' : ''; ?>" onclick="closeSidebar()">
-                    <i class="fas fa-user-friends"></i> Data Pelanggan
+                <a href="<?php echo site_url('pelanggan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'pelanggan' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+                    <i class="fas fa-user-friends w-5 mr-2.5 flex-shrink-0"></i> Data Pelanggan
                 </a>
             <?php endif; ?>
             
-            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
-                <a href="<?php echo site_url('auth/logout'); ?>" class="nav-link" onclick="closeSidebar()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+            <div class="mt-8 pt-5 border-t border-white/10 mb-5">
+                <a href="<?php echo site_url('auth/logout'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white" onclick="closeSidebar()">
+                    <i class="fas fa-sign-out-alt w-5 mr-2.5 flex-shrink-0"></i> Logout
                 </a>
             </div>
         </nav>
     </div>
     
     <!-- Main Content -->
-    <div class="main-content" id="mainContent">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <span class="navbar-brand mb-0 h1"><?php echo isset($title) ? $title : 'Dashboard'; ?></span>
-                <div class="user-info">
-                    <span><i class="fas fa-user"></i> <?php echo $this->session->userdata('username'); ?></span>
-                    <span class="badge badge-role badge-<?php echo $role == 'admin' ? 'admin' : 'petugas'; ?>">
-                        <?php echo ucfirst($role); ?>
-                    </span>
-                </div>
-            </div>
-        </nav>
+    <div class="ml-[280px] p-5 transition-all duration-300 ease-in-out animate-fade-in" id="mainContent">
+        <!-- Hamburger Button for Mobile -->
+                <button class="lg:hidden fixed top-5 right-5 z-50 text-blue-600 text-2xl p-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-300 bg-white shadow-md" id="hamburgerBtn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
         
         <!-- Content -->
-        <div class="content-card">
+        <div class="bg-white rounded-lg p-6 shadow-sm animate-scale-in">
             <?php $this->load->view($content, isset($data) ? $data : array()); ?>
         </div>
     </div>
-    
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
         function collapseSidebar() {
@@ -554,11 +164,12 @@
             const mainContent = document.getElementById('mainContent');
             const collapseBtn = document.getElementById('collapseBtn');
             
-            sidebar.classList.add('collapsed');
-            mainContent.classList.add('collapsed');
-            collapseBtn.classList.add('visible');
+            sidebar.classList.add('-translate-x-full');
+            sidebar.style.width = '0';
+            mainContent.classList.remove('ml-[280px]');
+            mainContent.classList.add('ml-0', 'pl-[70px]');
+            collapseBtn.classList.remove('hidden');
             
-            // Simpan state ke localStorage
             localStorage.setItem('sidebarCollapsed', 'true');
         }
         
@@ -567,11 +178,12 @@
             const mainContent = document.getElementById('mainContent');
             const collapseBtn = document.getElementById('collapseBtn');
             
-            sidebar.classList.remove('collapsed');
-            mainContent.classList.remove('collapsed');
-            collapseBtn.classList.remove('visible');
+            sidebar.classList.remove('-translate-x-full');
+            sidebar.style.width = '280px';
+            mainContent.classList.remove('ml-0', 'pl-[70px]');
+            mainContent.classList.add('ml-[280px]');
+            collapseBtn.classList.add('hidden');
             
-            // Simpan state ke localStorage
             localStorage.setItem('sidebarCollapsed', 'false');
         }
         
@@ -579,18 +191,16 @@
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             
-            sidebar.classList.toggle('hidden');
-            overlay.classList.toggle('active');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
         }
         
         function closeSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            
-            // Hanya tutup di mobile
-            if (window.innerWidth <= 992) {
-                sidebar.classList.add('hidden');
-                overlay.classList.remove('active');
+            if (window.innerWidth <= 1024) {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
             }
         }
 
@@ -599,38 +209,35 @@
             const menuToggle = event.currentTarget;
             const submenu = menuToggle.nextElementSibling;
             
-            // Tutup semua submenu lain
             document.querySelectorAll('.submenu.active').forEach(menu => {
                 if (menu !== submenu) {
-                    menu.classList.remove('active');
+                    menu.classList.remove('active', 'max-h-[500px]', 'opacity-100');
                     menu.previousElementSibling.classList.remove('active');
                 }
             });
             
-            // Toggle submenu saat ini
             submenu.classList.toggle('active');
             menuToggle.classList.toggle('active');
+            if (submenu.classList.contains('active')) {
+                submenu.classList.add('max-h-[500px]', 'opacity-100');
+            } else {
+                submenu.classList.remove('max-h-[500px]', 'opacity-100');
+            }
             
-            // Simpan state submenu ke localStorage
-            const isActive = submenu.classList.contains('active');
-            localStorage.setItem('masterDataSubmenuOpen', isActive ? 'true' : 'false');
+            localStorage.setItem('masterDataSubmenuOpen', submenu.classList.contains('active') ? 'true' : 'false');
         }
         
-        // Tutup sidebar saat overlay diklik
         document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
         
-        // Handle window resize
         window.addEventListener('resize', function() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            
-            if (window.innerWidth > 992) {
-                sidebar.classList.remove('hidden');
-                overlay.classList.remove('active');
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.add('hidden');
             }
         });
         
-        // Restore sidebar state on page load
         document.addEventListener('DOMContentLoaded', function() {
             const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
             const isMasterOpen = localStorage.getItem('masterDataSubmenuOpen') === 'true';
@@ -638,22 +245,21 @@
             const mainContent = document.getElementById('mainContent');
             const collapseBtn = document.getElementById('collapseBtn');
             
-            // Restore collapsed state
             if (isCollapsed) {
-                sidebar.classList.add('collapsed');
-                mainContent.classList.add('collapsed');
-                collapseBtn.classList.add('visible');
+                sidebar.classList.add('-translate-x-full');
+                sidebar.style.width = '0';
+                mainContent.classList.remove('ml-[280px]');
+                mainContent.classList.add('ml-0', 'pl-[70px]');
+                collapseBtn.classList.remove('hidden');
             }
             
-            // Restore submenu state
             if (isMasterOpen) {
-                const masterMenu = document.querySelector('.menu-item');
+                const masterMenu = document.querySelector('.menu-toggle');
                 if (masterMenu) {
-                    const menuToggle = masterMenu.querySelector('.menu-toggle');
-                    const submenu = masterMenu.querySelector('.submenu');
-                    if (menuToggle && submenu) {
-                        submenu.classList.add('active');
-                        menuToggle.classList.add('active');
+                    const submenu = masterMenu.nextElementSibling;
+                    if (submenu) {
+                        submenu.classList.add('active', 'max-h-[500px]', 'opacity-100');
+                        masterMenu.classList.add('active');
                     }
                 }
             }

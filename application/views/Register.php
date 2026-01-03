@@ -4,383 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrasi - KASIR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#3b82f6', secondary: '#2563eb' },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                    },
+                },
+            },
+        }
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .register-box {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-
-        .register-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 30px 20px;
-            text-align: center;
-            color: white;
-        }
-
-        .register-header h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .register-header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .register-body {
-            padding: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .form-row .form-group {
-            margin-bottom: 0;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-group.error input,
-        .form-group.error select {
-            border-color: #e74c3c;
-        }
-
-        .error-message {
-            color: #e74c3c;
-            font-size: 13px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .form-group.error .error-message {
-            display: block;
-        }
-
-        .password-strength {
-            margin-top: 8px;
-            font-size: 13px;
-        }
-
-        .strength-bar {
-            height: 4px;
-            background: #e0e0e0;
-            border-radius: 2px;
-            overflow: hidden;
-            margin-bottom: 5px;
-        }
-
-        .strength-progress {
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s, background-color 0.3s;
-        }
-
-        .strength-text {
-            color: #666;
-        }
-
-        .terms {
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .terms label {
-            display: flex;
-            align-items: flex-start;
-            margin: 0;
-            cursor: pointer;
-        }
-
-        .terms input[type="checkbox"] {
-            width: auto;
-            margin-right: 10px;
-            margin-top: 2px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .terms-text {
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .terms a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .terms a:hover {
-            text-decoration: underline;
-        }
-
-        .btn-register {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn-register:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-register:active {
-            transform: translateY(0);
-        }
-
-        .btn-register:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .register-footer {
-            background: #f8f9fa;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .register-footer p {
-            font-size: 14px;
-            color: #666;
-            margin: 0;
-        }
-
-        .register-footer a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        .register-footer a:hover {
-            color: #764ba2;
-        }
-
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .alert-danger {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            color: #667eea;
-        }
-
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                max-width: 100%;
-            }
-
-            .register-header h1 {
-                font-size: 24px;
-            }
-
-            .register-body {
-                padding: 20px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
+        .error-message { display: none; }
+        .form-group.error .error-message { display: block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="register-box">
-            <div class="register-header">
-                <h1><i class="fas fa-cash-register"></i> KASIR</h1>
-                <p>Buat Akun Baru</p>
+<body class="min-h-screen bg-white flex items-center justify-center p-5 animate-fade-in">
+    <div class="w-full max-w-lg animate-slide-up">
+        <div class="bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-200">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-8 text-center text-white">
+                <h1 class="text-3xl font-bold mb-1"><i class="fas fa-cash-register"></i> KASIR</h1>
+                <p class="text-sm opacity-90">Buat Akun Baru</p>
             </div>
 
-            <div class="register-body">
+            <div class="p-8">
                 <?php if ($this->session->flashdata('error')): ?>
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <?php echo $this->session->flashdata('error'); ?>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-5 animate-fade-in">
+                        <i class="fas fa-exclamation-circle"></i> <?php echo $this->session->flashdata('error'); ?>
                     </div>
                 <?php endif; ?>
 
                 <?php if ($this->session->flashdata('success')): ?>
-                    <div class="alert alert-success">
-                        <i class="fas fa-check-circle"></i>
-                        <?php echo $this->session->flashdata('success'); ?>
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-5 animate-fade-in">
+                        <i class="fas fa-check-circle"></i> <?php echo $this->session->flashdata('success'); ?>
                     </div>
                 <?php endif; ?>
 
                 <form id="registerForm" method="post" action="<?php echo site_url('auth/register'); ?>">
-                    <div class="form-row">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
                         <div class="form-group">
-                            <label for="first_name">Nama Depan</label>
-                            <input type="text" id="first_name" name="first_name" placeholder="John" required>
-                            <div class="error-message">Nama depan harus diisi</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="last_name">Nama Belakang</label>
-                            <input type="text" id="last_name" name="last_name" placeholder="Doe" required>
-                            <div class="error-message">Nama belakang harus diisi</div>
-                        </div>
+                            <label for="first_name" class="block mb-2 text-gray-700 font-medium text-sm">Nama Depan</label>
+                            <input type="text" id="first_name" name="first_name" placeholder="John" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                        <div class="error-message text-red-600 text-xs mt-1">Nama depan harus diisi</div>
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="email@example.com" required>
-                        <div class="error-message">Email tidak valid</div>
+                        <label for="last_name" class="block mb-2 text-gray-700 font-medium text-sm">Nama Belakang</label>
+                        <input type="text" id="last_name" name="last_name" placeholder="Doe" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                        <div class="error-message text-red-600 text-xs mt-1">Nama belakang harus diisi</div>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="username123" required>
-                        <div class="error-message">Username minimal 4 karakter</div>
-                    </div>
+                <div class="mb-5 form-group">
+                    <label for="email" class="block mb-2 text-gray-700 font-medium text-sm">Email</label>
+                    <input type="email" id="email" name="email" placeholder="email@example.com" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                    <div class="error-message text-red-600 text-xs mt-1">Email tidak valid</div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Masukkan password" required>
-                        <div class="password-strength">
-                            <div class="strength-bar">
-                                <div class="strength-progress" id="strengthProgress"></div>
+                <div class="mb-5 form-group">
+                    <label for="username" class="block mb-2 text-gray-700 font-medium text-sm">Username</label>
+                    <input type="text" id="username" name="username" placeholder="username123" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                    <div class="error-message text-red-600 text-xs mt-1">Username minimal 4 karakter</div>
+                </div>
+
+                <div class="mb-5 form-group">
+                    <label for="password" class="block mb-2 text-gray-700 font-medium text-sm">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Masukkan password" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                        <div class="mt-2 text-sm">
+                            <div class="h-1 bg-gray-200 rounded-full overflow-hidden mb-1">
+                                <div class="h-full transition-all duration-300" id="strengthProgress"></div>
                             </div>
-                            <div class="strength-text" id="strengthText">Kekuatan: Lemah</div>
+                            <div class="text-gray-600" id="strengthText">Kekuatan: Lemah</div>
                         </div>
-                        <div class="error-message">Password minimal 6 karakter</div>
+                        <div class="error-message text-red-600 text-xs mt-1">Password minimal 6 karakter</div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="confirm_password">Konfirmasi Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Konfirmasi password" required>
-                        <div class="error-message">Password tidak cocok</div>
+                    <div class="mb-5 form-group">
+                        <label for="confirm_password" class="block mb-2 text-gray-700 font-medium text-sm">Konfirmasi Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Konfirmasi password" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                    <div class="error-message text-red-600 text-xs mt-1">Password tidak cocok</div>
+                </div>
+
+                <div class="mb-5 form-group">
+                    <label for="phone" class="block mb-2 text-gray-700 font-medium text-sm">Nomor Telepon</label>
+                    <input type="tel" id="phone" name="phone" placeholder="08xxxxxxxxxx" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                    <div class="error-message text-red-600 text-xs mt-1">Nomor telepon tidak valid</div>
+                </div>
+
+                <div class="mb-5 form-group">
+                    <label for="address" class="block mb-2 text-gray-700 font-medium text-sm">Alamat</label>
+                    <input type="text" id="address" name="address" placeholder="Jalan, Kota" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                        <div class="error-message text-red-600 text-xs mt-1">Alamat harus diisi</div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="phone">Nomor Telepon</label>
-                        <input type="tel" id="phone" name="phone" placeholder="08xxxxxxxxxx">
-                        <div class="error-message">Nomor telepon tidak valid</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="address">Alamat</label>
-                        <input type="text" id="address" name="address" placeholder="Jalan, Kota">
-                        <div class="error-message">Alamat harus diisi</div>
-                    </div>
-
-                    <div class="terms">
-                        <label>
-                            <input type="checkbox" id="agree_terms" name="agree_terms" required>
-                            <span class="terms-text">
-                                Saya setuju dengan <a href="#" target="_blank">Syarat dan Ketentuan</a> 
-                                serta <a href="#" target="_blank">Kebijakan Privasi</a>
+                    <div class="mb-5 terms">
+                        <label class="flex items-start cursor-pointer">
+                            <input type="checkbox" id="agree_terms" name="agree_terms" required class="mr-2.5 mt-0.5 cursor-pointer flex-shrink-0">
+                            <span class="text-gray-600 text-sm leading-relaxed">
+                                Saya setuju dengan <a href="#" target="_blank" class="text-blue-600 hover:text-blue-700 transition-colors duration-300">Syarat dan Ketentuan</a> 
+                                serta <a href="#" target="_blank" class="text-blue-600 hover:text-blue-700 transition-colors duration-300">Kebijakan Privasi</a>
                             </span>
                         </label>
-                        <div class="error-message" style="margin-left: 32px;">Anda harus menyetujui syarat dan ketentuan</div>
+                        <div class="error-message text-red-600 text-xs mt-1 ml-8">Anda harus menyetujui syarat dan ketentuan</div>
                     </div>
 
-                    <button type="submit" class="btn-register">
-                        <span class="loading">
-                            <span class="spinner"></span>Mendaftar...
+                    <button type="submit" class="w-full py-3 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed">
+                        <span class="loading hidden">
+                            <span class="inline-block w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin mr-2"></span>Mendaftar...
                         </span>
                         <span class="register-text">Daftar</span>
                     </button>
                 </form>
             </div>
 
-            <div class="register-footer">
-                <p>Sudah punya akun? <a href="<?php echo site_url('auth/login'); ?>">Masuk di sini</a></p>
+            <div class="bg-gray-50 p-5 text-center border-t border-gray-200">
+                <p class="text-sm text-gray-600 m-0">Sudah punya akun? <a href="<?php echo site_url('auth/login'); ?>" class="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-300">Masuk di sini</a></p>
             </div>
         </div>
     </div>
@@ -515,10 +263,9 @@
                 return;
             }
 
-            // Show loading
             submitBtn.disabled = true;
-            loadingSpan.style.display = 'inline';
-            registerText.style.display = 'none';
+            loadingSpan.classList.remove('hidden');
+            registerText.classList.add('hidden');
 
             // Submit form
             form.submit();
