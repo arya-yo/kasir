@@ -419,7 +419,7 @@ Aplikasi memiliki **2 level akses**:
 
 ---
 
-## 📝 **13. DEMO FLOW UNTUK PRESENTASI**
+## 📝 **13. DEMO FLOW**
 
 ### **Demo 1: Login sebagai Admin**
 1. Buka halaman login
@@ -471,5 +471,5 @@ Aplikasi siap digunakan untuk mengelola transaksi penjualan di toko/retail denga
 
 ---
 
-**Dokumentasi ini dibuat untuk membantu presentasi aplikasi kasir dengan penjelasan yang detail dan mudah dipahami.**
+**Dokumentasi ini dibuat untuk penjelasan aplikasi kasir berbasis web ini.**
 
