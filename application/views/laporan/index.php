@@ -155,6 +155,7 @@
         const modal = document.getElementById('detailModal');
         const modalBody = document.getElementById('modalBody');
         modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
         
         fetch('<?php echo site_url('laporan/getDetail'); ?>/' + penjualanID)
             .then(response => response.text())
@@ -169,12 +170,14 @@
 
     function closeModal(modalId) {
         document.getElementById(modalId).classList.add('hidden');
+        document.body.style.overflow = 'auto';
     }
 
     function showDeleteConfirm() {
         if (!currentPenjualanID) return;
         closeModal('detailModal');
         document.getElementById('confirmDeleteModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 
     function confirmDelete() {
@@ -199,9 +202,5 @@
         });
     }
 
-    document.querySelectorAll('[id$="Modal"]').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) closeModal(this.id);
-        });
-    });
+    // Modal behavior configured - can only close with button clicks
 </script>

@@ -54,7 +54,15 @@ class User extends CI_Controller {
         $this->form_validation->set_rules('role', 'Role', 'required|in_list[admin,petugas]');
 
         if ($this->form_validation->run() === FALSE) {
-            $this->session->set_flashdata('error', validation_errors());
+            $error_message = validation_errors();
+            log_message('error', 'User Validation Error: ' . $error_message);
+            
+            if ($this->input->is_ajax_request()) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => strip_tags($error_message)]);
+                return;
+            }
+            $this->session->set_flashdata('error', $error_message);
             redirect('user/create');
         } else {
             $data = array(
@@ -64,9 +72,23 @@ class User extends CI_Controller {
             );
 
             if ($this->db->insert('users', $data)) {
+                log_message('info', 'User Created: ' . $this->input->post('username') . ' | Role: ' . $this->input->post('role'));
+                
+                if ($this->input->is_ajax_request()) {
+                    header('Content-Type: application/json');
+                    echo json_encode(['success' => true, 'message' => 'User berhasil ditambahkan']);
+                    return;
+                }
                 $this->session->set_flashdata('success', 'User berhasil ditambahkan');
                 redirect('user');
             } else {
+                log_message('error', 'User Insert Failed: ' . $this->db->error()['message']);
+                
+                if ($this->input->is_ajax_request()) {
+                    header('Content-Type: application/json');
+                    echo json_encode(['success' => false, 'message' => 'Gagal menambahkan user']);
+                    return;
+                }
                 $this->session->set_flashdata('error', 'Gagal menambahkan user');
                 redirect('user/create');
             }

@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($title) ? $title . ' - ' : ''; ?>Aplikasi Kasir</title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'><tspan>₪</tspan></text></svg>">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -102,43 +107,43 @@
         
         <nav class="py-5 max-h-[calc(100vh-120px)] overflow-y-auto overflow-x-hidden pr-1">
             
-            <a href="<?php echo site_url('dashboard'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'dashboard' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+            <a href="<?php echo site_url('dashboard'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1 border-l-4 border-transparent <?php echo $current_page == 'dashboard' ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : ''; ?>" onclick="closeSidebar()">
                 <i class="fas fa-home w-5 mr-2.5 flex-shrink-0"></i> Dashboard
             </a>
             
             <?php if ($role == 'admin'): ?>
                 <div class="relative">
-                    <a class="flex items-center justify-between text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white cursor-pointer menu-toggle" role="button" onclick="toggleSubmenu(event)">
+                    <a class="flex items-center justify-between text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1 cursor-pointer menu-toggle" role="button" onclick="toggleSubmenu(event)">
                         <span class="flex items-center"><i class="fas fa-database w-5 mr-2.5 flex-shrink-0"></i> Master Data</span>
                     </a>
                     <div class="max-h-0 overflow-hidden transition-all duration-400 opacity-0 submenu">
-                        <a class="flex items-center text-white/75 py-2 px-5 pl-12 my-0.5 text-sm transition-all duration-300 border-l-3 border-transparent hover:bg-white/10 hover:text-white hover:border-white/50 <?php echo $current_page == 'user' ? 'bg-white/15 text-white border-white' : ''; ?>" href="<?php echo site_url('user'); ?>" onclick="closeSidebar()">
+                        <a class="flex items-center text-white/75 py-2 px-5 pl-12 my-0.5 text-sm transition-all duration-300 border-l-3 border-transparent hover:bg-white/10 hover:text-white hover:border-white/50 hover:shadow-md hover:scale-105 hover:-translate-y-0.5 <?php echo $current_page == 'user' ? 'bg-white/20 text-white shadow-md border-white' : ''; ?>" href="<?php echo site_url('user'); ?>" onclick="closeSidebar()">
                             <i class="fas fa-users w-4 mr-2.5 flex-shrink-0 text-xs"></i> Data User
                         </a>
-                        <a class="flex items-center text-white/75 py-2 px-5 pl-12 my-0.5 text-sm transition-all duration-300 border-l-3 border-transparent hover:bg-white/10 hover:text-white hover:border-white/50 <?php echo $current_page == 'produk' ? 'bg-white/15 text-white border-white' : ''; ?>" href="<?php echo site_url('produk'); ?>" onclick="closeSidebar()">
+                        <a class="flex items-center text-white/75 py-2 px-5 pl-12 my-0.5 text-sm transition-all duration-300 border-l-3 border-transparent hover:bg-white/10 hover:text-white hover:border-white/50 hover:shadow-md hover:scale-105 hover:-translate-y-0.5 <?php echo $current_page == 'produk' ? 'bg-white/20 text-white shadow-md border-white' : ''; ?>" href="<?php echo site_url('produk'); ?>" onclick="closeSidebar()">
                             <i class="fas fa-box w-4 mr-2.5 flex-shrink-0 text-xs"></i> Data Produk
                         </a>
                     </div>
                 </div>
-                <a href="<?php echo site_url('pelanggan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'pelanggan' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+                <a href="<?php echo site_url('pelanggan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1 border-l-4 border-transparent <?php echo $current_page == 'pelanggan' ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : ''; ?>" onclick="closeSidebar()">
                     <i class="fas fa-user-friends w-5 mr-2.5 flex-shrink-0"></i> Data Pelanggan
                 </a>
-                <a href="<?php echo site_url('laporan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'laporan' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+                <a href="<?php echo site_url('laporan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1 border-l-4 border-transparent <?php echo $current_page == 'laporan' ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : ''; ?>" onclick="closeSidebar()">
                     <i class="fas fa-chart-bar w-5 mr-2.5 flex-shrink-0"></i> Laporan Penjualan
                 </a>
             <?php endif; ?>
             
             <?php if ($role == 'petugas'): ?>
-                <a href="<?php echo site_url('penjualan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'penjualan' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+                <a href="<?php echo site_url('penjualan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1 border-l-4 border-transparent <?php echo $current_page == 'penjualan' ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : ''; ?>" onclick="closeSidebar()">
                     <i class="fas fa-shopping-cart w-5 mr-2.5 flex-shrink-0"></i> Transaksi Penjualan
                 </a>
-                <a href="<?php echo site_url('pelanggan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white <?php echo $current_page == 'pelanggan' ? 'bg-white/10 text-white' : ''; ?>" onclick="closeSidebar()">
+                <a href="<?php echo site_url('pelanggan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1 border-l-4 border-transparent <?php echo $current_page == 'pelanggan' ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : ''; ?>" onclick="closeSidebar()">
                     <i class="fas fa-user-friends w-5 mr-2.5 flex-shrink-0"></i> Data Pelanggan
                 </a>
             <?php endif; ?>
             
             <div class="mt-8 pt-5 border-t border-white/10 mb-5">
-                <a href="<?php echo site_url('auth/logout'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white" onclick="closeSidebar()">
+                <a href="<?php echo site_url('auth/logout'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1" onclick="closeSidebar()">
                     <i class="fas fa-sign-out-alt w-5 mr-2.5 flex-shrink-0"></i> Logout
                 </a>
             </div>

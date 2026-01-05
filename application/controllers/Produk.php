@@ -52,6 +52,11 @@ class Produk extends CI_Controller {
     {
         // Hanya admin yang bisa tambah produk
         if ($this->session->userdata('role') != 'admin') {
+            if ($this->input->is_ajax_request()) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Anda tidak memiliki izin']);
+                return;
+            }
             redirect('produk');
         }
         
@@ -60,6 +65,11 @@ class Produk extends CI_Controller {
         $this->form_validation->set_rules('stok', 'Stok', 'required|integer|greater_than_equal_to[0]');
 
         if ($this->form_validation->run() === FALSE) {
+            if ($this->input->is_ajax_request()) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => strip_tags(validation_errors())]);
+                return;
+            }
             $this->session->set_flashdata('error', validation_errors());
             redirect('produk/create');
         } else {
@@ -70,9 +80,19 @@ class Produk extends CI_Controller {
             );
 
             if ($this->db->insert('produk', $data)) {
+                if ($this->input->is_ajax_request()) {
+                    header('Content-Type: application/json');
+                    echo json_encode(['success' => true, 'message' => 'Produk berhasil ditambahkan']);
+                    return;
+                }
                 $this->session->set_flashdata('success', 'Produk berhasil ditambahkan');
                 redirect('produk');
             } else {
+                if ($this->input->is_ajax_request()) {
+                    header('Content-Type: application/json');
+                    echo json_encode(['success' => false, 'message' => 'Gagal menambahkan produk']);
+                    return;
+                }
                 $this->session->set_flashdata('error', 'Gagal menambahkan produk');
                 redirect('produk/create');
             }

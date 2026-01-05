@@ -1,21 +1,10 @@
 <div class="animate-fade-in">
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    
     <div class="flex justify-between items-center mb-6">
         <h3 class="text-2xl font-bold text-gray-800">Transaksi Penjualan</h3>
     </div>
-
-    <?php if ($this->session->flashdata('success')): ?>
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 animate-fade-in flex justify-between items-center">
-            <span><i class="fas fa-check-circle mr-2"></i> <?php echo $this->session->flashdata('success'); ?></span>
-            <button type="button" onclick="this.parentElement.remove()" class="text-green-700 hover:text-green-900">&times;</button>
-        </div>
-    <?php endif; ?>
-
-    <?php if ($this->session->flashdata('error')): ?>
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 animate-fade-in flex justify-between items-center">
-            <span><i class="fas fa-exclamation-circle mr-2"></i> <?php echo $this->session->flashdata('error'); ?></span>
-            <button type="button" onclick="this.parentElement.remove()" class="text-red-700 hover:text-red-900">&times;</button>
-        </div>
-    <?php endif; ?>
 
     <!-- Search Produk -->
     <div class="bg-white rounded-lg shadow-sm p-5 mb-6">
@@ -37,6 +26,21 @@
         document.getElementById('searchInput').value = '';
         document.getElementById('searchForm').submit();
     }
+
+    // Show flashdata messages as toasts when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if ($this->session->flashdata('success')): ?>
+            setTimeout(() => {
+                showToast('<?php echo addslashes($this->session->flashdata('success')); ?>', 'success');
+            }, 100);
+        <?php endif; ?>
+        
+        <?php if ($this->session->flashdata('error')): ?>
+            setTimeout(() => {
+                showToast('<?php echo addslashes($this->session->flashdata('error')); ?>', 'error');
+            }, 100);
+        <?php endif; ?>
+    });
 </script>
 
     <form method="post" action="<?php echo site_url('penjualan/proses'); ?>" id="formPenjualan">
@@ -93,9 +97,53 @@
 
         <!-- Pagination -->
         <?php if (isset($pagination) && !empty($pagination)): ?>
-        <div class="flex justify-center mt-4">
-            <?php echo $pagination; ?>
-        </div>
+        <nav class="flex justify-center mt-6">
+            <ul class="flex gap-1">
+                <?php 
+                    // Use total_rows from controller for pagination calculation
+                    $page = isset($page) ? $page : 1;
+                    $per_page = 10;
+                    $total = isset($total_rows) ? $total_rows : count($produks);
+                    $total_pages = ceil($total / $per_page);
+                ?>
+                
+                <?php if ($page > 1): ?>
+                <li>
+                    <a class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300" href="<?php echo site_url('penjualan?page=' . ($page - 1)); ?>">
+                        <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
+                    </a>
+                </li>
+                <?php else: ?>
+                <li>
+                    <span class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-400 cursor-not-allowed">
+                        <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
+                    </span>
+                </li>
+                <?php endif; ?>
+                
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <li>
+                    <a class="px-4 py-2 rounded-lg transition-all duration-300 <?php echo $i == $page ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md' : 'bg-white border border-gray-300 hover:bg-gray-50'; ?>" href="<?php echo site_url('penjualan?page=' . $i); ?>">
+                        <?php echo $i; ?>
+                    </a>
+                </li>
+                <?php endfor; ?>
+                
+                <?php if ($page < $total_pages): ?>
+                <li>
+                    <a class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300" href="<?php echo site_url('penjualan?page=' . ($page + 1)); ?>">
+                        Selanjutnya <i class="fas fa-chevron-right ml-1"></i>
+                    </a>
+                </li>
+                <?php else: ?>
+                <li>
+                    <span class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-400 cursor-not-allowed">
+                        Selanjutnya <i class="fas fa-chevron-right ml-1"></i>
+                    </span>
+                </li>
+                <?php endif; ?>
+            </ul>
+        </nav>
         <?php endif; ?>
 
         <div class="mt-6 p-4 bg-gray-50 rounded-lg">
@@ -249,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validasi minimal satu produk dipilih
         const hasSelected = Array.from(checkboxes).some(cb => cb.checked);
         if (!hasSelected) {
-            alert('Pilih minimal satu produk!');
+            showToast('Pilih minimal satu produk!', 'warning');
             return;
         }
         
@@ -261,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const namaPelanggan = document.getElementById('nama_pelanggan').value.trim();
         
         if (!namaPelanggan) {
-            alert('Nama pelanggan harus diisi!');
+            showToast('Nama pelanggan harus diisi!', 'warning');
             return;
         }
         
@@ -296,4 +344,58 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial update
     updateTotal();
 });
+
+function showToast(message, type = 'success', duration = 3500) {
+    const toastContainer = document.getElementById('toastContainer');
+    
+    // Determine colors based on type
+    let bgColor, borderColor, textColor, icon;
+    switch(type) {
+        case 'success':
+            bgColor = 'bg-gradient-to-r from-green-50 to-emerald-50';
+            borderColor = 'border-green-300';
+            textColor = 'text-green-800';
+            icon = 'fas fa-check-circle text-green-600';
+            break;
+        case 'error':
+            bgColor = 'bg-gradient-to-r from-red-50 to-pink-50';
+            borderColor = 'border-red-300';
+            textColor = 'text-red-800';
+            icon = 'fas fa-exclamation-circle text-red-600';
+            break;
+        case 'warning':
+            bgColor = 'bg-gradient-to-r from-yellow-50 to-orange-50';
+            borderColor = 'border-yellow-300';
+            textColor = 'text-yellow-800';
+            icon = 'fas fa-exclamation-triangle text-yellow-600';
+            break;
+        default:
+            bgColor = 'bg-gradient-to-r from-blue-50 to-cyan-50';
+            borderColor = 'border-blue-300';
+            textColor = 'text-blue-800';
+            icon = 'fas fa-info-circle text-blue-600';
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = `${bgColor} border-2 ${borderColor} ${textColor} px-5 py-4 rounded-lg shadow-lg animate-fade-in flex items-start gap-3 min-w-max max-w-sm`;
+    
+    toast.innerHTML = `
+        <i class="${icon} flex-shrink-0 mt-0.5 text-lg"></i>
+        <div class="flex-1">
+            <p class="font-semibold text-sm">${message}</p>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" class="flex-shrink-0 text-xl hover:opacity-70 transition-opacity">
+            &times;
+        </button>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    // Auto remove after duration
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.remove();
+        }
+    }, duration);
+}
 </script>

@@ -79,7 +79,7 @@ class Penjualan extends CI_Controller {
         $this->pagination->initialize($config);
         $data['pagination'] = $this->pagination->create_links();
         $data['total_rows'] = $total_rows;
-        $data['current_page'] = $page;
+        $data['page'] = $page;
         $data['total_pages'] = ceil($total_rows / $per_page);
         $data['search'] = $search;
         

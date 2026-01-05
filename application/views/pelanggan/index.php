@@ -131,6 +131,7 @@
         const modal = document.getElementById('detailModal');
         const modalBody = document.getElementById('modalBody');
         modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
         
         fetch('<?php echo site_url('pelanggan/getDetail'); ?>/' + penjualanID)
             .then(response => response.text())
@@ -145,9 +146,8 @@
 
     function closeModal(modalId) {
         document.getElementById(modalId).classList.add('hidden');
+        document.body.style.overflow = 'auto';
     }
 
-    document.getElementById('detailModal').addEventListener('click', function(e) {
-        if (e.target === this) closeModal('detailModal');
-    });
+    // Modal behavior configured - can only close with button clicks
 </script>

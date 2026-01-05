@@ -2,9 +2,9 @@
     <div class="flex justify-between items-center mb-6">
         <h3 class="text-2xl font-bold text-gray-800">Data Produk</h3>
         <?php if ($this->session->userdata('role') == 'admin'): ?>
-        <a href="<?php echo site_url('produk/create'); ?>" class="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+        <button onclick="showCreateModal()" class="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:scale-105">
             <i class="fas fa-plus mr-2"></i> Tambah Produk
-        </a>
+        </button>
         <?php endif; ?>
     </div>
 
@@ -122,6 +122,55 @@
     </nav>
     <?php endif; ?>
 
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Modal Create Produk -->
+    <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" id="createModal">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 animate-scale-in max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center p-5 border-b">
+                <h5 class="text-lg font-semibold">Tambah Produk Baru</h5>
+                <button type="button" onclick="closeModal('createModal')" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            </div>
+            <div class="p-5">
+                <form id="createProdukForm" class="space-y-4">
+                    <!-- Nama Produk -->
+                    <div>
+                        <label for="create_nama_produk" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-tag text-blue-600 mr-1"></i> Nama Produk
+                        </label>
+                        <input type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300" id="create_nama_produk" name="nama_produk" placeholder="Nama produk" required>
+                    </div>
+                    
+                    <!-- Harga -->
+                    <div>
+                        <label for="create_harga" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-money-bill-wave text-green-600 mr-1"></i> Harga (Rp)
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-2.5 text-gray-500 font-semibold">Rp</span>
+                            <input type="number" class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300" id="create_harga" name="harga" placeholder="0" min="1" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Stok -->
+                    <div>
+                        <label for="create_stok" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-boxes text-orange-600 mr-1"></i> Stok
+                        </label>
+                        <input type="number" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" id="create_stok" name="stok" placeholder="0" min="0" required>
+                    </div>
+                </form>
+            </div>
+            <div class="p-5 border-t flex justify-end gap-2">
+                <button type="button" onclick="closeModal('createModal')" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-300">Batal</button>
+                <button type="button" onclick="submitCreateProduk()" class="px-4 py-2 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all duration-300">
+                    <i class="fas fa-save mr-2"></i> Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Detail Produk -->
     <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" id="detailModal">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 animate-scale-in">
@@ -188,6 +237,7 @@
         const modal = document.getElementById('detailModal');
         const modalBody = document.getElementById('modalBody');
         modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
         
         fetch('<?php echo site_url('produk/getDetail'); ?>/' + produkID)
             .then(response => response.text())
@@ -200,10 +250,19 @@
             });
     }
 
+    function showCreateModal() {
+        const modal = document.getElementById('createModal');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        // Reset form
+        document.getElementById('createProdukForm').reset();
+    }
+
     function showEditModal(produkID) {
         const modal = document.getElementById('editModal');
         const editModalBody = document.getElementById('editModalBody');
         modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
         
         fetch('<?php echo site_url('produk/getEdit'); ?>/' + produkID)
             .then(response => response.text())
@@ -218,40 +277,216 @@
 
     function closeModal(modalId) {
         document.getElementById(modalId).classList.add('hidden');
+        document.body.style.overflow = 'auto';
     }
 
-    function submitEditProduk() {
-        const produkID = editProdukID;
-        const nama_produk = document.getElementById('nama_produk').value;
-        const harga = document.getElementById('harga').value;
-        const stok = document.getElementById('stok').value;
+    function showToast(message, type = 'success', duration = 3500) {
+        const toastContainer = document.getElementById('toastContainer');
         
-        if (!nama_produk || !harga || stok === '') {
-            alert('Semua field harus diisi');
+        // Determine colors based on type
+        let bgColor, borderColor, textColor, icon;
+        switch(type) {
+            case 'success':
+                bgColor = 'bg-gradient-to-r from-green-50 to-emerald-50';
+                borderColor = 'border-green-300';
+                textColor = 'text-green-800';
+                icon = 'fas fa-check-circle text-green-600';
+                break;
+            case 'error':
+                bgColor = 'bg-gradient-to-r from-red-50 to-pink-50';
+                borderColor = 'border-red-300';
+                textColor = 'text-red-800';
+                icon = 'fas fa-exclamation-circle text-red-600';
+                break;
+            case 'warning':
+                bgColor = 'bg-gradient-to-r from-yellow-50 to-orange-50';
+                borderColor = 'border-yellow-300';
+                textColor = 'text-yellow-800';
+                icon = 'fas fa-exclamation-triangle text-yellow-600';
+                break;
+            default:
+                bgColor = 'bg-gradient-to-r from-blue-50 to-cyan-50';
+                borderColor = 'border-blue-300';
+                textColor = 'text-blue-800';
+                icon = 'fas fa-info-circle text-blue-600';
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `${bgColor} border-2 ${borderColor} ${textColor} px-5 py-4 rounded-lg shadow-lg animate-fade-in flex items-start gap-3 min-w-max max-w-sm`;
+        
+        toast.innerHTML = `
+            <i class="${icon} flex-shrink-0 mt-0.5 text-lg"></i>
+            <div class="flex-1">
+                <p class="font-semibold text-sm">${message}</p>
+            </div>
+            <button type="button" onclick="this.parentElement.remove()" class="flex-shrink-0 text-xl hover:opacity-70 transition-opacity">
+                &times;
+            </button>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        // Auto remove after duration
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, duration);
+    }
+
+    function submitCreateProduk() {
+        const nama_produk = document.getElementById('create_nama_produk');
+        const harga = document.getElementById('create_harga');
+        const stok = document.getElementById('create_stok');
+        
+        const nama_produk_value = nama_produk.value.trim();
+        const harga_value = harga.value.trim();
+        const stok_value = stok.value.trim();
+        
+        // Validasi nilai
+        if (!nama_produk_value) {
+            showToast('Nama Produk harus diisi', 'warning');
+            nama_produk.focus();
+            return;
+        }
+        if (!harga_value || parseInt(harga_value) < 1) {
+            showToast('Harga harus diisi dan minimal 1', 'warning');
+            harga.focus();
+            return;
+        }
+        if (stok_value === '' || parseInt(stok_value) < 0) {
+            showToast('Stok harus diisi dan tidak boleh negatif', 'warning');
+            stok.focus();
             return;
         }
         
         const formData = new FormData();
-        formData.append('nama_produk', nama_produk);
-        formData.append('harga', harga);
-        formData.append('stok', stok);
+        formData.append('nama_produk', nama_produk_value);
+        formData.append('harga', harga_value);
+        formData.append('stok', stok_value);
         
-        fetch('<?php echo site_url('produk/update'); ?>/' + produkID, {
+        // Disable button saat submit
+        const submitBtn = event.target;
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> Menyimpan...';
+        }
+        
+        fetch('<?php echo site_url('produk/store'); ?>', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Produk berhasil ditambahkan!', 'success');
+                closeModal('createModal');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showToast('Error: ' + (data.message || 'Gagal menyimpan data'), 'error');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Simpan';
+                }
+            }
+        })
+        .catch(error => {
+            showToast('Gagal menyimpan data: ' + error.message, 'error');
+            console.error('Error:', error);
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Simpan';
+            }
+        });
+    }
+
+    function submitEditProduk() {
+        const form = document.getElementById('editProdukForm');
+        
+        if (!form) {
+            showToast('Form tidak ditemukan. Silakan buka modal edit kembali.', 'error');
+            return;
+        }
+        
+        // Ambil ID dari form attribute
+        const editProdukID = form.getAttribute('data-produk-id');
+        
+        if (!editProdukID || editProdukID === '') {
+            showToast('ID Produk tidak ditemukan. Silakan buka modal edit kembali.', 'error');
+            return;
+        }
+
+        const nama_produk = document.getElementById('nama_produk');
+        const harga = document.getElementById('harga');
+        const stok = document.getElementById('stok');
+        
+        // Validasi elemen form ada
+        if (!nama_produk || !harga || !stok) {
+            showToast('Form tidak lengkap. Silakan buka modal edit kembali.', 'error');
+            return;
+        }
+        
+        const nama_produk_value = nama_produk.value.trim();
+        const harga_value = harga.value.trim();
+        const stok_value = stok.value.trim();
+        
+        // Validasi nilai
+        if (!nama_produk_value) {
+            showToast('Nama Produk harus diisi', 'warning');
+            nama_produk.focus();
+            return;
+        }
+        if (!harga_value || parseInt(harga_value) < 1) {
+            showToast('Harga harus diisi dan minimal 1', 'warning');
+            harga.focus();
+            return;
+        }
+        if (stok_value === '' || parseInt(stok_value) < 0) {
+            showToast('Stok harus diisi dan tidak boleh negatif', 'warning');
+            stok.focus();
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('nama_produk', nama_produk_value);
+        formData.append('harga', harga_value);
+        formData.append('stok', stok_value);
+        
+        // Disable button saat submit
+        const submitBtn = event.target || document.querySelector('button[onclick="submitEditProduk()"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> Menyimpan...';
+        }
+        
+        fetch('<?php echo site_url('produk/update'); ?>/' + editProdukID, {
             method: 'POST',
             body: formData
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                showToast('Produk berhasil disimpan!', 'success');
                 closeModal('editModal');
                 setTimeout(() => location.reload(), 1500);
             } else {
-                alert('Error: ' + data.message);
+                showToast('Error: ' + (data.message || 'Gagal menyimpan data'), 'error');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Simpan';
+                }
             }
         })
         .catch(error => {
-            alert('Gagal menyimpan data');
+            showToast('Gagal menyimpan data: ' + error.message, 'error');
             console.error('Error:', error);
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Simpan';
+            }
         });
     }
 
@@ -259,6 +494,7 @@
         currentProdukID = produkID;
         document.getElementById('produkName').textContent = produkName;
         document.getElementById('confirmDeleteModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 
     function confirmDelete() {
@@ -272,22 +508,18 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                showToast('Produk berhasil dihapus!', 'success');
                 setTimeout(() => location.reload(), 1500);
             } else {
-                alert('Error: ' + data.message);
+                showToast('Error: ' + (data.message || 'Gagal menghapus data'), 'error');
             }
         })
         .catch(error => {
-            alert('Gagal menghapus data');
+            showToast('Gagal menghapus data: ' + error.message, 'error');
             console.error('Error:', error);
         });
     }
 
-    // Close modal on outside click
-    document.querySelectorAll('[id$="Modal"]').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) closeModal(this.id);
-        });
-    });
+    // Modal behavior configured - can only close with button clicks
 </script>
 

@@ -70,7 +70,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" class="w-full py-3 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0">
+                    <button type="submit" class="w-full py-3 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 btn-login">
                         <span class="loading hidden">
                             <span class="inline-block w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin mr-2"></span>Masuk...
                         </span>
