@@ -23,7 +23,8 @@ class Produk extends CI_Controller {
     {
         $data['title'] = 'Data Produk';
         $data['current_page'] = 'produk';
-        $data['produks'] = $this->db->get('produk')->result();
+        // Hanya tampilkan produk yang tidak dihapus (soft delete)
+        $data['produks'] = $this->db->where('IsDeleted', 0)->get('produk')->result();
         $data['page'] = $this->input->get('page') ? (int)$this->input->get('page') : 1;
         $data['content'] = 'produk/index';
         $this->load->view('layouts/sidebar', $data);
@@ -170,7 +171,7 @@ class Produk extends CI_Controller {
     }
 
     /**
-     * Hapus produk
+     * Hapus produk (Soft Delete)
      */
     public function delete($id)
     {
@@ -186,7 +187,7 @@ class Produk extends CI_Controller {
         
         header('Content-Type: application/json');
         
-        // Cek apakah produk ada
+        // Cek apakah produk ada (termasuk yang sudah di-delete untuk validasi)
         $produk = $this->db->get_where('produk', ['ProdukID' => $id])->row();
         
         if (!$produk) {
@@ -197,7 +198,17 @@ class Produk extends CI_Controller {
             return;
         }
         
-        if ($this->db->where('ProdukID', $id)->delete('produk')) {
+        // Cek apakah produk sudah dihapus sebelumnya
+        if ($produk->IsDeleted == 1) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Produk sudah dihapus sebelumnya'
+            ]);
+            return;
+        }
+        
+        // Soft delete: update IsDeleted = 1
+        if ($this->db->where('ProdukID', $id)->update('produk', ['IsDeleted' => 1])) {
             echo json_encode([
                 'success' => true,
                 'message' => 'Produk berhasil dihapus'

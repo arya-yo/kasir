@@ -38,6 +38,7 @@ class Penjualan extends CI_Controller {
             $this->db->like('NamaProduk', $search);
         }
         $this->db->where('Stok >', 0); // Hanya produk yang ada stoknya
+        $this->db->where('IsDeleted', 0); // Hanya produk yang tidak dihapus (soft delete)
         $this->db->stop_cache();
         
         $total_rows = $this->db->count_all_results('produk');
@@ -120,10 +121,12 @@ class Penjualan extends CI_Controller {
             
             if ($jumlah <= 0) continue;
 
-            $produk = $this->db->where('ProdukID', $produk_id)->get('produk')->row();
+            $produk = $this->db->where('ProdukID', $produk_id)
+                               ->where('IsDeleted', 0) // Hanya produk yang tidak dihapus
+                               ->get('produk')->row();
             
             if (!$produk) {
-                $this->session->set_flashdata('error', 'Produk tidak ditemukan');
+                $this->session->set_flashdata('error', 'Produk tidak ditemukan atau sudah dihapus');
                 redirect('penjualan');
             }
 

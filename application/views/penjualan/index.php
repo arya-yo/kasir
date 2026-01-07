@@ -160,30 +160,103 @@
 
     <!-- Modal Data Pelanggan -->
     <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" id="modalPelanggan">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 animate-scale-in">
-            <div class="flex justify-between items-center p-5 border-b">
-                <h5 class="text-lg font-semibold">Data Pelanggan</h5>
-                <button type="button" onclick="closePelangganModal()" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+        <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-4 animate-scale-in max-h-[90vh] overflow-y-auto">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-xl">
+                <div class="flex justify-between items-center">
+                    <h5 class="text-xl font-bold flex items-center gap-2">
+                        <i class="fas fa-shopping-cart"></i> Data Pelanggan & Pembayaran
+                    </h5>
+                   
+                </div>
             </div>
-            <div class="p-5">
-                <form id="formPelanggan">
-                    <div class="mb-4">
-                        <label for="nama_pelanggan" class="block mb-2 text-gray-700 font-medium text-sm">Nama Pelanggan <span class="text-red-500">*</span></label>
-                        <input type="text" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" id="nama_pelanggan" name="nama_pelanggan" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="alamat" class="block mb-2 text-gray-700 font-medium text-sm">Alamat</label>
-                        <textarea class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" id="alamat" name="alamat" rows="3"></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="nomor_telepon" class="block mb-2 text-gray-700 font-medium text-sm">Nomor Telepon</label>
-                        <input type="text" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" id="nomor_telepon" name="nomor_telepon">
+            
+            <!-- Body -->
+            <div class="p-6">
+                <form id="formPelanggan" class="space-y-5">
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- Kolom Kiri: Data Pelanggan -->
+                        <div class="space-y-5">
+                            <h6 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2">
+                                <i class="fas fa-user-circle text-blue-600"></i> Data Pelanggan
+                            </h6>
+                            
+                            <!-- Nama Pelanggan -->
+                            <div>
+                                <label for="nama_pelanggan" class="block mb-2 text-gray-700 font-semibold text-sm">
+                                    <i class="fas fa-user text-blue-600 mr-1"></i> Nama Pelanggan <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300" id="nama_pelanggan" name="nama_pelanggan" placeholder="Masukkan nama pelanggan" required>
+                            </div>
+                            
+                            <!-- Alamat -->
+                            <div>
+                                <label for="alamat" class="block mb-2 text-gray-700 font-semibold text-sm">
+                                    <i class="fas fa-map-marker-alt text-green-600 mr-1"></i> Alamat
+                                </label>
+                                <textarea class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none" id="alamat" name="alamat" rows="4" placeholder="Masukkan alamat pelanggan (opsional)"></textarea>
+                            </div>
+                            
+                            <!-- Nomor Telepon -->
+                            <div>
+                                <label for="nomor_telepon" class="block mb-2 text-gray-700 font-semibold text-sm">
+                                    <i class="fas fa-phone text-purple-600 mr-1"></i> Nomor Telepon
+                                </label>
+                                <input type="text" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300" id="nomor_telepon" name="nomor_telepon" placeholder="Masukkan nomor telepon (opsional)">
+                            </div>
+                        </div>
+                        
+                        <!-- Kolom Kanan: Informasi Pembayaran (Diperlebar) -->
+                        <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 space-y-5">
+                            <h6 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2">
+                                <i class="fas fa-money-bill-wave text-green-600"></i> Informasi Pembayaran
+                            </h6>
+                            
+                            <!-- Total Harga -->
+                            <div class="bg-white rounded-lg p-5 border-2 border-gray-200">
+                                <p class="text-gray-700 font-semibold text-sm mb-2">Total Belanja:</p>
+                                <p class="text-3xl font-bold text-blue-600" id="modalTotalHarga">Rp 0</p>
+                            </div>
+                            
+                            <!-- Uang Pelanggan -->
+                            <div>
+                                <label for="uang_pelanggan" class="block mb-2 text-gray-700 font-semibold text-sm">
+                                    <i class="fas fa-wallet text-orange-600 mr-1"></i> Uang Pelanggan <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-3.5 text-gray-500 font-semibold">Rp</span>
+                                    <input type="number" class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 font-semibold text-lg" id="uang_pelanggan" name="uang_pelanggan" placeholder="0" min="0" step="1000" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Kembalian -->
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-5 border-2 border-green-200">
+                                <p class="text-gray-700 font-bold text-sm mb-3 flex items-center gap-2">
+                                    <i class="fas fa-coins text-green-600"></i> Kembalian:
+                                </p>
+                                <p class="text-4xl font-bold text-green-600" id="kembalian">
+                                    <span id="nilaiKembalian">Rp 0</span>
+                                </p>
+                            </div>
+                            
+                            <!-- Keterangan -->
+                            <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-3">
+                                <p class="text-xs text-yellow-800 flex items-start gap-2">
+                                    <i class="fas fa-info-circle text-yellow-600 mt-0.5 flex-shrink-0"></i>
+                                    <span><strong>Catatan:</strong> Kembalian dihitung otomatis. Jika negatif (-), uang kurang.</span>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
-            <div class="p-5 border-t flex justify-end gap-2">
-                <button type="button" onclick="closePelangganModal()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-300">Batal</button>
-                <button type="button" class="px-4 py-2 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all duration-300" id="btnSimpanTransaksi">
+            
+            <!-- Footer -->
+            <div class="p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl flex justify-end gap-3">
+                <button type="button" onclick="closePelangganModal()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg transition-all duration-300 hover:shadow-md">
+                    <i class="fas fa-times mr-2"></i> Batal
+                </button>
+                <button type="button" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed" id="btnSimpanTransaksi">
                     <i class="fas fa-save mr-2"></i> Simpan Transaksi
                 </button>
             </div>
@@ -192,6 +265,137 @@
 </div>
 
 <script>
+// Definisikan fungsi global di luar DOMContentLoaded
+function closePelangganModal() {
+    const modal = document.getElementById('modalPelanggan');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function showPelangganModal() {
+    const modal = document.getElementById('modalPelanggan');
+    const totalHargaSpan = document.getElementById('totalHarga');
+    
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    // Update total harga di modal
+    const total = parseFloat(totalHargaSpan.textContent.replace(/[^\d]/g, '')) || 0;
+    document.getElementById('modalTotalHarga').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    
+    // Reset uang pelanggan dan kembalian
+    const uangPelangganInput = document.getElementById('uang_pelanggan');
+    if (uangPelangganInput) {
+        uangPelangganInput.value = '';
+    }
+    document.getElementById('nilaiKembalian').textContent = 'Rp 0';
+    document.getElementById('kembalian').classList.remove('text-red-600');
+    document.getElementById('kembalian').classList.add('text-green-600');
+    const kembalianBox = document.getElementById('kembalian').parentElement;
+    kembalianBox.classList.remove('from-red-50', 'to-rose-50', 'border-red-200');
+    kembalianBox.classList.add('from-green-50', 'to-emerald-50', 'border-green-200');
+    
+    // Disable tombol simpan saat modal dibuka
+    document.getElementById('btnSimpanTransaksi').disabled = true;
+    
+    // Focus ke input uang pelanggan
+    setTimeout(() => {
+        if (uangPelangganInput) {
+            uangPelangganInput.focus();
+        }
+    }, 300);
+}
+
+function hitungKembalian() {
+    const total = parseFloat(document.getElementById('totalHarga').textContent.replace(/[^\d]/g, '')) || 0;
+    const uangPelangganInput = document.getElementById('uang_pelanggan');
+    if (!uangPelangganInput) return;
+    
+    const uangPelanggan = parseFloat(uangPelangganInput.value) || 0;
+    const kembalian = uangPelanggan - total;
+    
+    // Update tampilan kembalian dengan indikator minus
+    const nilaiKembalian = document.getElementById('nilaiKembalian');
+    const kembalianElement = document.getElementById('kembalian');
+    
+    if (kembalian < 0) {
+        // Tampilkan dengan minus di depan
+        nilaiKembalian.textContent = '- Rp ' + Math.abs(kembalian).toLocaleString('id-ID');
+        kembalianElement.classList.remove('text-green-600');
+        kembalianElement.classList.add('text-red-600');
+        kembalianElement.parentElement.classList.remove('from-green-50', 'to-emerald-50', 'border-green-200');
+        kembalianElement.parentElement.classList.add('from-red-50', 'to-rose-50', 'border-red-200');
+    } else {
+        nilaiKembalian.textContent = 'Rp ' + kembalian.toLocaleString('id-ID');
+        kembalianElement.classList.remove('text-red-600');
+        kembalianElement.classList.add('text-green-600');
+        kembalianElement.parentElement.classList.remove('from-red-50', 'to-rose-50', 'border-red-200');
+        kembalianElement.parentElement.classList.add('from-green-50', 'to-emerald-50', 'border-green-200');
+    }
+    
+    // Enable/disable tombol simpan berdasarkan kembalian
+    const btnSimpan = document.getElementById('btnSimpanTransaksi');
+    if (uangPelanggan >= total && uangPelanggan > 0) {
+        btnSimpan.disabled = false;
+    } else {
+        btnSimpan.disabled = true;
+    }
+}
+
+function showToast(message, type = 'success', duration = 3500) {
+    const toastContainer = document.getElementById('toastContainer');
+    
+    // Determine colors based on type
+    let bgColor, borderColor, textColor, icon;
+    switch(type) {
+        case 'success':
+            bgColor = 'bg-gradient-to-r from-green-50 to-emerald-50';
+            borderColor = 'border-green-300';
+            textColor = 'text-green-800';
+            icon = 'fas fa-check-circle text-green-600';
+            break;
+        case 'error':
+            bgColor = 'bg-gradient-to-r from-red-50 to-pink-50';
+            borderColor = 'border-red-300';
+            textColor = 'text-red-800';
+            icon = 'fas fa-exclamation-circle text-red-600';
+            break;
+        case 'warning':
+            bgColor = 'bg-gradient-to-r from-yellow-50 to-orange-50';
+            borderColor = 'border-yellow-300';
+            textColor = 'text-yellow-800';
+            icon = 'fas fa-exclamation-triangle text-yellow-600';
+            break;
+        default:
+            bgColor = 'bg-gradient-to-r from-blue-50 to-cyan-50';
+            borderColor = 'border-blue-300';
+            textColor = 'text-blue-800';
+            icon = 'fas fa-info-circle text-blue-600';
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = `${bgColor} border-2 ${borderColor} ${textColor} px-5 py-4 rounded-lg shadow-lg animate-fade-in flex items-start gap-3 min-w-max max-w-sm`;
+    
+    toast.innerHTML = `
+        <i class="${icon} flex-shrink-0 mt-0.5 text-lg"></i>
+        <div class="flex-1">
+            <p class="font-semibold text-sm">${message}</p>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" class="flex-shrink-0 text-xl hover:opacity-70 transition-opacity">
+            &times;
+        </button>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    // Auto remove after duration
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.remove();
+        }
+    }, duration);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const checkboxes = document.querySelectorAll('.produk-checkbox');
     const jumlahInputs = document.querySelectorAll('.jumlah-input');
@@ -199,14 +403,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnPlus = document.querySelectorAll('.btn-plus');
     const totalHargaSpan = document.getElementById('totalHarga');
     const btnProsesTransaksi = document.getElementById('btnProsesTransaksi');
-    function closePelangganModal() {
-        document.getElementById('modalPelanggan').classList.add('hidden');
-    }
-    
-    function showPelangganModal() {
-        document.getElementById('modalPelanggan').classList.remove('hidden');
-    }
     const formPenjualan = document.getElementById('formPenjualan');
+    const modalPelanggan = document.getElementById('modalPelanggan');
+    
+    // Event listener untuk uang pelanggan
+    document.addEventListener('input', function(e) {
+        if (e.target && e.target.id === 'uang_pelanggan') {
+            hitungKembalian();
+        }
+    });
+    
+    document.addEventListener('keyup', function(e) {
+        if (e.target && e.target.id === 'uang_pelanggan') {
+            hitungKembalian();
+        }
+    });
 
     function updateTotal() {
         let total = 0;
@@ -307,9 +518,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle simpan transaksi
     document.getElementById('btnSimpanTransaksi').addEventListener('click', function() {
         const namaPelanggan = document.getElementById('nama_pelanggan').value.trim();
+        const uangPelanggan = parseFloat(document.getElementById('uang_pelanggan').value) || 0;
+        const total = parseFloat(totalHargaSpan.textContent.replace(/[^\d]/g, '')) || 0;
         
         if (!namaPelanggan) {
             showToast('Nama pelanggan harus diisi!', 'warning');
+            document.getElementById('nama_pelanggan').focus();
+            return;
+        }
+        
+        if (!uangPelanggan || uangPelanggan <= 0) {
+            showToast('Uang pelanggan harus diisi!', 'warning');
+            document.getElementById('uang_pelanggan').focus();
+            return;
+        }
+        
+        if (uangPelanggan < total) {
+            showToast('Uang pelanggan tidak mencukupi!', 'error');
+            document.getElementById('uang_pelanggan').focus();
             return;
         }
         
@@ -332,70 +558,33 @@ document.addEventListener('DOMContentLoaded', function() {
         inputTelepon.value = document.getElementById('nomor_telepon').value;
         formPenjualan.appendChild(inputTelepon);
         
+        // Tambahkan hidden input untuk uang pelanggan dan kembalian
+        let inputUangPelanggan = document.createElement('input');
+        inputUangPelanggan.type = 'hidden';
+        inputUangPelanggan.name = 'uang_pelanggan';
+        inputUangPelanggan.value = uangPelanggan;
+        formPenjualan.appendChild(inputUangPelanggan);
+        
+        let inputKembalian = document.createElement('input');
+        inputKembalian.type = 'hidden';
+        inputKembalian.name = 'kembalian';
+        inputKembalian.value = uangPelanggan - total;
+        formPenjualan.appendChild(inputKembalian);
+        
+        // Disable button saat submit
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> Menyimpan...';
+        
         // Submit form
         formPenjualan.submit();
     });
 
     // Close modal on outside click
-    document.getElementById('modalPelanggan').addEventListener('click', function(e) {
+    modalPelanggan.addEventListener('click', function(e) {
         if (e.target === this) closePelangganModal();
     });
 
     // Initial update
     updateTotal();
 });
-
-function showToast(message, type = 'success', duration = 3500) {
-    const toastContainer = document.getElementById('toastContainer');
-    
-    // Determine colors based on type
-    let bgColor, borderColor, textColor, icon;
-    switch(type) {
-        case 'success':
-            bgColor = 'bg-gradient-to-r from-green-50 to-emerald-50';
-            borderColor = 'border-green-300';
-            textColor = 'text-green-800';
-            icon = 'fas fa-check-circle text-green-600';
-            break;
-        case 'error':
-            bgColor = 'bg-gradient-to-r from-red-50 to-pink-50';
-            borderColor = 'border-red-300';
-            textColor = 'text-red-800';
-            icon = 'fas fa-exclamation-circle text-red-600';
-            break;
-        case 'warning':
-            bgColor = 'bg-gradient-to-r from-yellow-50 to-orange-50';
-            borderColor = 'border-yellow-300';
-            textColor = 'text-yellow-800';
-            icon = 'fas fa-exclamation-triangle text-yellow-600';
-            break;
-        default:
-            bgColor = 'bg-gradient-to-r from-blue-50 to-cyan-50';
-            borderColor = 'border-blue-300';
-            textColor = 'text-blue-800';
-            icon = 'fas fa-info-circle text-blue-600';
-    }
-    
-    const toast = document.createElement('div');
-    toast.className = `${bgColor} border-2 ${borderColor} ${textColor} px-5 py-4 rounded-lg shadow-lg animate-fade-in flex items-start gap-3 min-w-max max-w-sm`;
-    
-    toast.innerHTML = `
-        <i class="${icon} flex-shrink-0 mt-0.5 text-lg"></i>
-        <div class="flex-1">
-            <p class="font-semibold text-sm">${message}</p>
-        </div>
-        <button type="button" onclick="this.parentElement.remove()" class="flex-shrink-0 text-xl hover:opacity-70 transition-opacity">
-            &times;
-        </button>
-    `;
-    
-    toastContainer.appendChild(toast);
-    
-    // Auto remove after duration
-    setTimeout(() => {
-        if (toast.parentElement) {
-            toast.remove();
-        }
-    }, duration);
-}
 </script>

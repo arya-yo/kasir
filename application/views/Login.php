@@ -34,7 +34,7 @@
         <div class="bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-200">
             <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-8 text-center text-white">
                 <h1 class="text-3xl font-bold mb-1"><i class="fas fa-cash-register"></i> KASIR</h1>
-                <p class="text-sm opacity-90">Sistem Manajemen Kasir</p>
+                <p class="text-sm opacity-90">Sistem Manajemen Kasir arya & alip</p>
             </div>
 
             <div class="p-8">
@@ -66,7 +66,7 @@
                     <div class="flex items-center mb-5 text-sm">
                         <label class="flex items-center cursor-pointer">
                             <input type="checkbox" name="remember" value="1" class="mr-2 cursor-pointer">
-                            Ingat saya
+                            Ingatkan saya
                         </label>
                     </div>
 

@@ -60,10 +60,10 @@ class Pelanggan extends CI_Controller {
             redirect('pelanggan');
         }
         
-        // Ambil detail penjualan
+        // Ambil detail penjualan (menggunakan LEFT JOIN agar tetap bisa mengakses produk yang sudah di-delete)
         $this->db->select('detailpenjualan.*, produk.NamaProduk, produk.Harga');
         $this->db->from('detailpenjualan');
-        $this->db->join('produk', 'produk.ProdukID = detailpenjualan.ProdukID');
+        $this->db->join('produk', 'produk.ProdukID = detailpenjualan.ProdukID', 'left');
         $this->db->where('detailpenjualan.PenjualanID', $id);
         $data['details'] = $this->db->get()->result();
         
@@ -88,10 +88,10 @@ class Pelanggan extends CI_Controller {
             return;
         }
         
-        // Ambil detail penjualan
+        // Ambil detail penjualan (menggunakan LEFT JOIN agar tetap bisa mengakses produk yang sudah di-delete)
         $this->db->select('detailpenjualan.*, produk.NamaProduk, produk.Harga');
         $this->db->from('detailpenjualan');
-        $this->db->join('produk', 'produk.ProdukID = detailpenjualan.ProdukID');
+        $this->db->join('produk', 'produk.ProdukID = detailpenjualan.ProdukID', 'left');
         $this->db->where('detailpenjualan.PenjualanID', $id);
         $details = $this->db->get()->result();
         

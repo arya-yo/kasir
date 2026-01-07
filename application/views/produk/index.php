@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center mb-6">
         <h3 class="text-2xl font-bold text-gray-800">Data Produk</h3>
         <?php if ($this->session->userdata('role') == 'admin'): ?>
-        <button onclick="showCreateModal()" class="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:scale-105">
+        <button onclick="showCreateModal()" class="bg-gradient-to-br from-primary to-secondary text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
             <i class="fas fa-plus mr-2"></i> Tambah Produk
         </button>
         <?php endif; ?>
@@ -99,7 +99,7 @@
             
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
             <li>
-                <a class="px-4 py-2 rounded-lg transition-all duration-300 <?php echo $i == $page ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md' : 'bg-white border border-gray-300 hover:bg-gray-50'; ?>" href="<?php echo site_url('produk?page=' . $i); ?>">
+                <a class="px-4 py-2 rounded-lg transition-all duration-300 <?php echo $i == $page ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-md' : 'bg-white border border-gray-300 hover:bg-gray-50'; ?>" href="<?php echo site_url('produk?page=' . $i); ?>">
                     <?php echo $i; ?>
                 </a>
             </li>
@@ -121,6 +121,45 @@
         </ul>
     </nav>
     <?php endif; ?>
+
+    <!-- Modal Detail Produk -->
+    <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" id="detailModal">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 animate-scale-in">
+            <div class="flex justify-between items-center p-5 border-b">
+                <h5 class="text-lg font-semibold">Detail Produk</h5>
+                <button type="button" onclick="closeModal('detailModal')" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            </div>
+            <div class="p-5" id="modalBody">
+                <div class="text-center py-8">
+                    <div class="inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            </div>
+            <div class="p-5 border-t flex justify-end">
+                <button type="button" onclick="closeModal('detailModal')" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-300">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Produk -->
+    <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" id="editModal">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 animate-scale-in">
+            <div class="flex justify-between items-center p-5 border-b">
+                <h5 class="text-lg font-semibold">Edit Produk</h5>
+                <button type="button" onclick="closeModal('editModal')" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            </div>
+            <div class="p-5" id="editModalBody">
+                <div class="text-center py-8">
+                    <div class="inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            </div>
+            <div class="p-5 border-t flex justify-end gap-2">
+                <button type="button" onclick="closeModal('editModal')" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-300">Batal</button>
+                <button type="button" onclick="submitEditProduk()" class="px-4 py-2 bg-gradient-to-br from-primary to-secondary text-white rounded-lg hover:shadow-lg transition-all duration-300">
+                    <i class="fas fa-save mr-2"></i> Simpan
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Toast Notification Container -->
     <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
@@ -164,46 +203,7 @@
             </div>
             <div class="p-5 border-t flex justify-end gap-2">
                 <button type="button" onclick="closeModal('createModal')" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-300">Batal</button>
-                <button type="button" onclick="submitCreateProduk()" class="px-4 py-2 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all duration-300">
-                    <i class="fas fa-save mr-2"></i> Simpan
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Detail Produk -->
-    <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" id="detailModal">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 animate-scale-in">
-            <div class="flex justify-between items-center p-5 border-b">
-                <h5 class="text-lg font-semibold">Detail Produk</h5>
-                <button type="button" onclick="closeModal('detailModal')" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
-            </div>
-            <div class="p-5" id="modalBody">
-                <div class="text-center py-8">
-                    <div class="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                </div>
-            </div>
-            <div class="p-5 border-t flex justify-end">
-                <button type="button" onclick="closeModal('detailModal')" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-300">Tutup</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Edit Produk -->
-    <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" id="editModal">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 animate-scale-in">
-            <div class="flex justify-between items-center p-5 border-b">
-                <h5 class="text-lg font-semibold">Edit Produk</h5>
-                <button type="button" onclick="closeModal('editModal')" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
-            </div>
-            <div class="p-5" id="editModalBody">
-                <div class="text-center py-8">
-                    <div class="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                </div>
-            </div>
-            <div class="p-5 border-t flex justify-end gap-2">
-                <button type="button" onclick="closeModal('editModal')" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-300">Batal</button>
-                <button type="button" onclick="submitEditProduk()" class="px-4 py-2 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all duration-300">
+                <button type="button" onclick="submitCreateProduk()" class="px-4 py-2 bg-gradient-to-br from-primary to-secondary text-white rounded-lg hover:shadow-lg transition-all duration-300">
                     <i class="fas fa-save mr-2"></i> Simpan
                 </button>
             </div>
@@ -232,58 +232,11 @@
 
 <script>
     let currentProdukID = null;
-
-    function showDetailModal(produkID) {
-        const modal = document.getElementById('detailModal');
-        const modalBody = document.getElementById('modalBody');
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-        
-        fetch('<?php echo site_url('produk/getDetail'); ?>/' + produkID)
-            .then(response => response.text())
-            .then(data => {
-                modalBody.innerHTML = data;
-            })
-            .catch(error => {
-                modalBody.innerHTML = '<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">Gagal memuat data</div>';
-                console.error('Error:', error);
-            });
-    }
-
-    function showCreateModal() {
-        const modal = document.getElementById('createModal');
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-        // Reset form
-        document.getElementById('createProdukForm').reset();
-    }
-
-    function showEditModal(produkID) {
-        const modal = document.getElementById('editModal');
-        const editModalBody = document.getElementById('editModalBody');
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-        
-        fetch('<?php echo site_url('produk/getEdit'); ?>/' + produkID)
-            .then(response => response.text())
-            .then(data => {
-                editModalBody.innerHTML = data;
-            })
-            .catch(error => {
-                editModalBody.innerHTML = '<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">Gagal memuat form</div>';
-                console.error('Error:', error);
-            });
-    }
-
-    function closeModal(modalId) {
-        document.getElementById(modalId).classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
+    let editProdukID = null;
 
     function showToast(message, type = 'success', duration = 3500) {
         const toastContainer = document.getElementById('toastContainer');
         
-        // Determine colors based on type
         let bgColor, borderColor, textColor, icon;
         switch(type) {
             case 'success':
@@ -326,12 +279,20 @@
         
         toastContainer.appendChild(toast);
         
-        // Auto remove after duration
         setTimeout(() => {
             if (toast.parentElement) {
-                toast.remove();
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
             }
         }, duration);
+    }
+
+    function showCreateModal() {
+        const modal = document.getElementById('createModal');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('createProdukForm').reset();
     }
 
     function submitCreateProduk() {
@@ -343,14 +304,13 @@
         const harga_value = harga.value.trim();
         const stok_value = stok.value.trim();
         
-        // Validasi nilai
         if (!nama_produk_value) {
-            showToast('Nama Produk harus diisi', 'warning');
+            showToast('Nama produk harus diisi', 'warning');
             nama_produk.focus();
             return;
         }
-        if (!harga_value || parseInt(harga_value) < 1) {
-            showToast('Harga harus diisi dan minimal 1', 'warning');
+        if (!harga_value || parseFloat(harga_value) <= 0) {
+            showToast('Harga harus diisi dan lebih dari 0', 'warning');
             harga.focus();
             return;
         }
@@ -365,7 +325,6 @@
         formData.append('harga', harga_value);
         formData.append('stok', stok_value);
         
-        // Disable button saat submit
         const submitBtn = event.target;
         if (submitBtn) {
             submitBtn.disabled = true;
@@ -379,7 +338,16 @@
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                return response.text().then(text => {
+                    throw new Error('Server mengembalikan respons yang tidak valid.');
+                });
+            }
+        })
         .then(data => {
             if (data.success) {
                 showToast('Produk berhasil ditambahkan!', 'success');
@@ -403,6 +371,46 @@
         });
     }
 
+    function showDetailModal(produkID) {
+        const modal = document.getElementById('detailModal');
+        const modalBody = document.getElementById('modalBody');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        
+        fetch('<?php echo site_url('produk/getDetail'); ?>/' + produkID)
+            .then(response => response.text())
+            .then(data => {
+                modalBody.innerHTML = data;
+            })
+            .catch(error => {
+                modalBody.innerHTML = '<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">Gagal memuat data</div>';
+                console.error('Error:', error);
+            });
+    }
+
+    function showEditModal(produkID) {
+        editProdukID = produkID;
+        const modal = document.getElementById('editModal');
+        const editModalBody = document.getElementById('editModalBody');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        
+        fetch('<?php echo site_url('produk/getEdit'); ?>/' + produkID)
+            .then(response => response.text())
+            .then(data => {
+                editModalBody.innerHTML = data;
+            })
+            .catch(error => {
+                editModalBody.innerHTML = '<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">Gagal memuat form</div>';
+                console.error('Error:', error);
+            });
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
     function submitEditProduk() {
         const form = document.getElementById('editProdukForm');
         
@@ -411,19 +419,17 @@
             return;
         }
         
-        // Ambil ID dari form attribute
-        const editProdukID = form.getAttribute('data-produk-id');
+        const produkID = form.getAttribute('data-produk-id') || editProdukID;
         
-        if (!editProdukID || editProdukID === '') {
+        if (!produkID) {
             showToast('ID Produk tidak ditemukan. Silakan buka modal edit kembali.', 'error');
             return;
         }
-
+        
         const nama_produk = document.getElementById('nama_produk');
         const harga = document.getElementById('harga');
         const stok = document.getElementById('stok');
         
-        // Validasi elemen form ada
         if (!nama_produk || !harga || !stok) {
             showToast('Form tidak lengkap. Silakan buka modal edit kembali.', 'error');
             return;
@@ -433,14 +439,13 @@
         const harga_value = harga.value.trim();
         const stok_value = stok.value.trim();
         
-        // Validasi nilai
         if (!nama_produk_value) {
-            showToast('Nama Produk harus diisi', 'warning');
+            showToast('Nama produk harus diisi', 'warning');
             nama_produk.focus();
             return;
         }
-        if (!harga_value || parseInt(harga_value) < 1) {
-            showToast('Harga harus diisi dan minimal 1', 'warning');
+        if (!harga_value || parseFloat(harga_value) <= 0) {
+            showToast('Harga harus diisi dan lebih dari 0', 'warning');
             harga.focus();
             return;
         }
@@ -455,18 +460,29 @@
         formData.append('harga', harga_value);
         formData.append('stok', stok_value);
         
-        // Disable button saat submit
         const submitBtn = event.target || document.querySelector('button[onclick="submitEditProduk()"]');
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> Menyimpan...';
         }
         
-        fetch('<?php echo site_url('produk/update'); ?>/' + editProdukID, {
+        fetch('<?php echo site_url('produk/update'); ?>/' + produkID, {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         })
-        .then(response => response.json())
+        .then(response => {
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                return response.text().then(text => {
+                    throw new Error('Server mengembalikan respons yang tidak valid.');
+                });
+            }
+        })
         .then(data => {
             if (data.success) {
                 showToast('Produk berhasil disimpan!', 'success');
@@ -505,7 +521,16 @@
             method: 'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
-        .then(response => response.json())
+        .then(response => {
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                return response.text().then(text => {
+                    throw new Error('Server mengembalikan respons yang tidak valid.');
+                });
+            }
+        })
         .then(data => {
             if (data.success) {
                 showToast('Produk berhasil dihapus!', 'success');
@@ -520,6 +545,13 @@
         });
     }
 
-    // Modal behavior configured - can only close with button clicks
+    // Close modal on outside click
+    document.querySelectorAll('[id$="Modal"]').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal(this.id);
+            }
+        });
+    });
 </script>
 
