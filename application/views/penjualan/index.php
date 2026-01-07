@@ -6,7 +6,7 @@
         <h3 class="text-2xl font-bold text-gray-800">Transaksi Penjualan</h3>
     </div>
 
-    <!-- Search Produk -->
+    <!-- Search -->
     <div class="bg-white rounded-lg shadow-sm p-5 mb-6">
         <form method="get" action="<?php echo site_url('penjualan'); ?>" class="flex gap-2" id="searchForm">
             <input type="text" class="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" name="search" id="searchInput" placeholder="Cari produk..." value="<?php echo isset($search) ? $search : ''; ?>">
