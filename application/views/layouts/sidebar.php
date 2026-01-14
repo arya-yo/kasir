@@ -126,7 +126,7 @@
                     </div>
                 </div>
                 <a href="<?php echo site_url('pelanggan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1 border-l-4 border-transparent <?php echo $current_page == 'pelanggan' ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : ''; ?>" onclick="closeSidebar()">
-                    <i class="fas fa-user-friends w-5 mr-2.5 flex-shrink-0"></i> Data Pelanggan
+                    <i class="fas fa-user-friends w-5 mr-2.5 flex-shrink-0"></i> Riwayat Data Pelanggan
                 </a>
                 <a href="<?php echo site_url('laporan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1 border-l-4 border-transparent <?php echo $current_page == 'laporan' ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : ''; ?>" onclick="closeSidebar()">
                     <i class="fas fa-chart-bar w-5 mr-2.5 flex-shrink-0"></i> Laporan Penjualan
@@ -138,7 +138,7 @@
                     <i class="fas fa-shopping-cart w-5 mr-2.5 flex-shrink-0"></i> Transaksi Penjualan
                 </a>
                 <a href="<?php echo site_url('pelanggan'); ?>" class="flex items-center text-white/80 py-3 px-5 mx-2.5 my-1.5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:scale-105 hover:-translate-y-1 border-l-4 border-transparent <?php echo $current_page == 'pelanggan' ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : ''; ?>" onclick="closeSidebar()">
-                    <i class="fas fa-user-friends w-5 mr-2.5 flex-shrink-0"></i> Data Pelanggan
+                    <i class="fas fa-user-friends w-5 mr-2.5 flex-shrink-0"></i> Riwayat Data Pelanggan
                 </a>
             <?php endif; ?>
             

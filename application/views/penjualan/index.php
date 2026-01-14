@@ -206,7 +206,7 @@
                             </div>
                         </div>
                         
-                        <!-- Kolom Kanan: Informasi Pembayaran (Diperlebar) -->
+                        <!-- Kolom Kanan: Informasi Pembayaran -->
                         <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 space-y-5">
                             <h6 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2">
                                 <i class="fas fa-money-bill-wave text-green-600"></i> Informasi Pembayaran

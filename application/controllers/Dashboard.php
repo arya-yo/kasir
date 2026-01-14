@@ -33,6 +33,11 @@ class Dashboard extends CI_Controller {
             $data['total_user'] = $this->db->count_all('users');
             $data['total_produk'] = $this->db->count_all('produk');
             $data['total_penjualan'] = $this->db->count_all('penjualan');
+        } else if ($this->session->userdata('role') == 'petugas') {
+            // Hitung statistik untuk petugas
+            $data['total_penjualan'] = $this->db->count_all('penjualan');
+            $data['total_pelanggan'] = $this->db->where('PelangganID IS NOT NULL', NULL, FALSE)
+                                                  ->count_all_results('penjualan');
         }
         
         $data['content'] = 'dashboard/index';
